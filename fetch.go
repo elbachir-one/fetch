@@ -20,6 +20,7 @@ const (
     Magenta= "\033[35m"
     Cyan   = "\033[36m"
     White  = "\033[37m"
+    Bold   = "\033[1m" // ANSI bold code
 )
 
 func main() {
@@ -36,7 +37,7 @@ func main() {
 		}
 	}
 	if verbose {
-		fmt.Printf("\n%sSystem Information - Version %s%s\n\n", Green, VERSION, Reset)
+		fmt.Printf("\n%sSystem Information - Version %s%s\n\n", Bold, Green, VERSION, Reset)
 	}
 	printSystemInfo(minimal)
 }
