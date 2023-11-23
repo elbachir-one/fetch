@@ -176,12 +176,23 @@ func getRAMInfo() string {
 }
 
 func getWMInfo() string {
-	wm := os.Getenv("XDG_CURRENT_DESKTOP")
-	if wm == "" {
-		return "Unknown"
+	// Try to get window manager information using XDG_SESSION_TYPE
+	sessionType := os.Getenv("XDG_SESSION_TYPE")
+	if sessionType != "" {
+		return "Window Manager: " + sessionType
 	}
 
-	return "WM: " + wm
+	// Try to get window manager information using xprop
+	cmd := exec.Command("xprop", "-root", "_NET_WM_NAME")
+	out, err := cmd.Output()
+	if err == nil {
+		// Parse the output to extract the window manager name
+		if parts := strings.SplitN(string(out), "=", 2); len(parts) == 2 {
+			return "Window Manager: " + strings.TrimSpace(parts[1])
+		}
+	}
+
+	return "Unknown"
 }
 
 func getDesktopEnvironment() string {
