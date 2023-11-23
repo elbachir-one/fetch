@@ -52,6 +52,7 @@ func printSystemInfo(minimal bool) {
 	fmt.Printf("%sStorage:%s %s\n", Yellow, Reset, getStorageInfo())
 	fmt.Printf("%sRAM:%s %s\n", Yellow, Reset, getRAMInfo())
 	fmt.Printf("%sWM:%s %s\n", Cyan, Reset, getWMInfo())
+        fmt.Printf("%sDesktop Environment:%s %s\n", Red, Reset, getDesktopEnvironment())
 }
 
 func getOSInfo() string {
@@ -181,4 +182,18 @@ func getWMInfo() string {
 	}
 
 	return "WM: " + wm
+}
+
+func getDesktopEnvironment() string {
+    // For Linux
+    desktopEnv := os.Getenv("XDG_CURRENT_DESKTOP")
+    if desktopEnv != "" {
+	return desktopEnv
+    }
+    // Try an alternative environment variable
+    altDesktopEnv := os.Getenv("DESKTOP_SESSION")
+    if altDesktopEnv != "" {
+	return altDesktopEnv
+    }
+    return "Unknown"
 }
