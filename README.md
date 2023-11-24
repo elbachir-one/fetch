@@ -4,7 +4,10 @@ Fetch is a simple command-line utility written in Go (Golang) that provides deta
 It gathers information about the operating system, packages, kernel, uptime, shell, CPU, GPU, storage, RAM, and window manager.
 
 ![Fetch](assets/fetch1.png)
+
 ![Fetch](assets/fetch2.png)
+
+![Fetch](assets/fetch3.png)
 
 ## Usage
 
