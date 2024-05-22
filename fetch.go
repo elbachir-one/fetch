@@ -11,16 +11,16 @@ const VERSION = "1.0.0"
 
 // ANSI color codes
 const (
-    Reset  = "\033[0m"
-    Black  = "\033[30m"
-    Red    = "\033[31m"
-    Green  = "\033[32m"
-    Yellow = "\033[33m"
-    Blue   = "\033[34m"
-    Magenta= "\033[35m"
-    Cyan   = "\033[36m"
-    White  = "\033[37m"
-    Bold   = "\033[1m" // ANSI bold code
+	Reset   = "\033[0m"
+	Black   = "\033[30m"
+	Red     = "\033[31m"
+	Green   = "\033[32m"
+	Yellow  = "\033[33m"
+	Blue    = "\033[34m"
+	Magenta = "\033[35m"
+	Cyan    = "\033[36m"
+	White   = "\033[37m"
+	Bold    = "\033[1m" // ANSI bold code
 )
 
 func main() {
@@ -37,23 +37,26 @@ func main() {
 		}
 	}
 	if verbose {
-		fmt.Printf("\n%sSystem Information - Version %s%s\n\n", Bold, Green, VERSION, Reset)
+		fmt.Printf("\n%sSystem Information - Version %s%s%s\n\n", Bold, Green, VERSION, Reset)
 	}
 	printSystemInfo(minimal)
 }
 
 func printSystemInfo(minimal bool) {
-	fmt.Printf("%sOS:%s %s\n", Magenta, Reset, getOSInfo())
-	fmt.Printf("%sPackages:%s %s\n", Yellow, Reset, getPackageInfo())
-	fmt.Printf("%sKernel:%s %s\n", Yellow, Reset, getKernelInfo())
-	fmt.Printf("%sUptime:%s %s\n", Yellow, Reset, getUptimeInfo())
-	fmt.Printf("%sShell:%s %s\n", Yellow, Reset, getShellInfo())
-	fmt.Printf("%sCPU:%s %s\n", Blue, Reset, getCPUInfo())
-	fmt.Printf("%sGPU:%s %s\n", Yellow, Reset, getGPUInfo())
-	fmt.Printf("%sStorage:%s %s\n", Yellow, Reset, getStorageInfo())
-	fmt.Printf("%sRAM:%s %s\n", Yellow, Reset, getRAMInfo())
-	fmt.Printf("%sWM:%s %s\n", Cyan, Reset, getWMInfo())
-        fmt.Printf("%sDesktop Environment:%s %s\n", Red, Reset, getDesktopEnvironment())
+	// Define a format string with a fixed width for labels
+	format := "%-20s: %s\n"
+
+	fmt.Printf(format, fmt.Sprintf("%sOS%s", Magenta, Reset), getOSInfo())
+	fmt.Printf(format, fmt.Sprintf("%sPackages%s", Yellow, Reset), getPackageInfo())
+	fmt.Printf(format, fmt.Sprintf("%sKernel%s", Yellow, Reset), getKernelInfo())
+	fmt.Printf(format, fmt.Sprintf("%sUptime%s", Yellow, Reset), getUptimeInfo())
+	fmt.Printf(format, fmt.Sprintf("%sShell%s", Yellow, Reset), getShellInfo())
+	fmt.Printf(format, fmt.Sprintf("%sCPU%s", Blue, Reset), getCPUInfo())
+	fmt.Printf(format, fmt.Sprintf("%sGPU%s", Yellow, Reset), getGPUInfo())
+	fmt.Printf(format, fmt.Sprintf("%sStorage%s", Yellow, Reset), getStorageInfo())
+	fmt.Printf(format, fmt.Sprintf("%sRAM%s", Yellow, Reset), getRAMInfo())
+	fmt.Printf(format, fmt.Sprintf("%sWM%s", Cyan, Reset), getWMInfo())
+	fmt.Printf(format, fmt.Sprintf("%sDesktop Environment%s", Red, Reset), getDesktopEnvironment())
 }
 
 func getOSInfo() string {
@@ -88,19 +91,19 @@ func getPackageInfo() string {
 		cmd = exec.Command("pkg", "info")
 	} else {
 		// If no recognized package manager is found, return "Unknown"
-		return fmt.Sprintf("%sPackages:%s Unknown", Yellow, Reset)
+		return "Unknown"
 	}
 
 	out, err := cmd.Output()
 	if err != nil {
-		return fmt.Sprintf("%sPackages:%s Unknown", Yellow, Reset)
+		return "Unknown"
 	}
 
 	// Count the number of lines in the output to get the package count
 	lines := strings.Split(strings.TrimSpace(string(out)), "\n")
 	packageCount := len(lines)
 
-	return fmt.Sprintf("%sPackages:%s %d", Yellow, Reset, packageCount)
+	return fmt.Sprintf("%d", packageCount)
 }
 
 func getKernelInfo() string {
@@ -114,7 +117,7 @@ func getKernelInfo() string {
 }
 
 func getUptimeInfo() string {
-	return fmt.Sprintf("Uptime: %s", getUptime())
+	return getUptime()
 }
 
 func getUptime() string {
@@ -133,7 +136,7 @@ func getShellInfo() string {
 		return "Unknown"
 	}
 
-	return "Shell: " + shell
+	return shell
 }
 
 func getCPUInfo() string {
@@ -143,7 +146,7 @@ func getCPUInfo() string {
 		return "Unknown"
 	}
 
-	return "CPU: " + strings.TrimSpace(string(out))
+	return strings.TrimSpace(string(out))
 }
 
 func getGPUInfo() string {
@@ -153,7 +156,7 @@ func getGPUInfo() string {
 		return "Unknown"
 	}
 
-	return "GPU: " + strings.TrimSpace(string(out))
+	return strings.TrimSpace(string(out))
 }
 
 func getStorageInfo() string {
@@ -163,7 +166,7 @@ func getStorageInfo() string {
 		return "Unknown"
 	}
 
-	return "Storage: " + strings.TrimSpace(string(out))
+	return strings.TrimSpace(string(out))
 }
 
 func getRAMInfo() string {
@@ -173,14 +176,14 @@ func getRAMInfo() string {
 		return "Unknown"
 	}
 
-	return "RAM: " + strings.TrimSpace(string(out))
+	return strings.TrimSpace(string(out))
 }
 
 func getWMInfo() string {
 	// Try to get window manager information using XDG_SESSION_TYPE
 	sessionType := os.Getenv("XDG_SESSION_TYPE")
 	if sessionType != "" {
-		return "Window Manager: " + sessionType
+		return sessionType
 	}
 
 	// Try to get window manager information using xprop
@@ -189,7 +192,7 @@ func getWMInfo() string {
 	if err == nil {
 		// Parse the output to extract the window manager name
 		if parts := strings.SplitN(string(out), "=", 2); len(parts) == 2 {
-			return "Window Manager: " + strings.TrimSpace(parts[1])
+			return strings.TrimSpace(parts[1])
 		}
 	}
 
@@ -197,15 +200,15 @@ func getWMInfo() string {
 }
 
 func getDesktopEnvironment() string {
-    // For Linux
-    desktopEnv := os.Getenv("XDG_CURRENT_DESKTOP")
-    if desktopEnv != "" {
-	return desktopEnv
-    }
-    // Try an alternative environment variable
-    altDesktopEnv := os.Getenv("DESKTOP_SESSION")
-    if altDesktopEnv != "" {
-	return altDesktopEnv
-    }
-    return "Unknown"
+	// For Linux
+	desktopEnv := os.Getenv("XDG_CURRENT_DESKTOP")
+	if desktopEnv != "" {
+		return desktopEnv
+	}
+	// Try an alternative environment variable
+	altDesktopEnv := os.Getenv("DESKTOP_SESSION")
+	if altDesktopEnv != "" {
+		return altDesktopEnv
+	}
+	return "Unknown"
 }
