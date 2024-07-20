@@ -1,0 +1,4 @@
+In this version, I added a subsection for Prerequisites to highlight the need for Go installation.
+I also reorganized the Installation section to separate the cloning and building steps for clarity.
+Finally, I adjusted the wording for running Gofetch to make it more explicit.
+Feel free to further modify it according to your preferences!
