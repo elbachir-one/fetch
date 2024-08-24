@@ -21,8 +21,8 @@ Clone the Fetch repository and build the executable:
 
 ```bash
 git clone https://github.com/elbachir-one/fetch
-cd fetch
-go build fetch.go
+cd fetch/
+go build
 ```
 
 ### Run Fetch
